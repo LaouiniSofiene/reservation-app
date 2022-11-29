@@ -1,3 +1,7 @@
+'use client';
+
+import Header from "../components/Header"
+
 export default function RootLayout({
   children,
 }: {
@@ -6,7 +10,12 @@ export default function RootLayout({
   return (
     <html>
       <head />
-      <body>{children}</body>
+      <body>
+        <Header />
+        <div>
+          {children}  
+        </div>
+      </body>
     </html>
   )
 }
