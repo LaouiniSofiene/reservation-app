@@ -1,26 +1,45 @@
 'use client';
-import styled from 'styled-components';
 
+import styled from 'styled-components';
 import '../styles/globals.css'
 import Calendar from 'react-calendar'
 import { useState } from 'react';
+import Form from '../components/Form';
+import Reservation from '../components/Reservation';
 
 function homePage() {
   const [value, onChange] = useState(new Date());
-  const tileDisabled = ({ date }) => {
-    return date < new Date() || date.getDay() === 0 || date.getDay() === 6
- }
+  const tileDisabled = ({ date } : {date : Date}) => {
+    return date < new Date((new Date()).valueOf() - 1000*3600*24) || date.getDay() === 0 || date.getDay() === 6
+  }
+
   return (
     <div className="flex main-container flex-col gap-10">
       <div>
-        <h1 className="text-5xl font-bold text-black">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
             Welcome back !
         </h1>
       </div>
       <div>
-      <CalendarContainer>
-        <Calendar onChange={onChange} tileDisabled={tileDisabled} value={value} />
-      </CalendarContainer>
+        <div className="flex flex-col md:flex-row w-full gap-10">
+          <div className="flex-1 w-full">
+            <CalendarContainer>
+              <Calendar onChange={onChange} tileDisabled={tileDisabled} value={value} />
+            </CalendarContainer>
+          </div>
+          <div className="flex-1 mt-5 rounded-md bg-card p-5">
+            <Form />
+          </div>
+          <div className="flex-1 mt-5 rounded-md bg-card p-5">
+            <div>
+                <p className="block mb-2 text-3xl font-medium text-gray-900 dark:text-white border-b-4 border-[#56697F] pb-2">Reservation for Date DD/MM/YYYY</p>
+            </div>
+            <Reservation />
+            <Reservation />
+            <Reservation />
+            <Reservation />
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -30,19 +49,13 @@ export default homePage
 
 const CalendarContainer = styled.div`
   /* ~~~ container styles ~~~ */
-  max-width: 600px;
+  max-width: 100%;
   margin-top: 20px;
-  background-color: #acd3ff;
+  background-color: rgba(255, 255, 255, 0.35);
   padding: 10px;
   border-radius: 3px;
 
-  /* ~~~ calendar container styles ~~~ */
-     @media (min-width: 1200px) {
-      .react-calendar {
-        width : 580px;
-      }
-     }
-
+  
   /* ~~~ navigation styles ~~~ */
   .react-calendar__navigation {
     display: flex;
@@ -75,10 +88,10 @@ const CalendarContainer = styled.div`
   /* ~~~ button styles ~~~ */
   button {
     margin: 3px;
-    background-color: #ffffff;
+    background-color: #c5a7d1;
     border: 0;
     border-radius: 3px;
-    color: black;
+    color: #ffffff;
     padding: 5px 0;
     &:hover {
       background-color: #000000;

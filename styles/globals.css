@@ -4,12 +4,12 @@
 
 @layer base {
   body {
-    @apply bg-[#cccccc] text-white;
+    @apply bg-gradient-to-r from-rose-400 to-orange-300 text-white;
   }
   header {
-    @apply top-0 z-50 flex w-full items-center justify-between px-4 py-4 transition-all lg:px-10 lg:py-8 bg-[#acd3ff];
+    @apply bg-header top-0 z-50 flex w-full items-center justify-between px-4 py-4 transition-all lg:px-10 lg:py-8;
   }
   .main-container{
-    @apply p-10 bg-white w-screen;
+    @apply p-10 w-screen;
   }
 }

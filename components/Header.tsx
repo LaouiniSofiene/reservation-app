@@ -15,17 +15,17 @@ function Header() {
         <div className="flex items-center space-x-2 md:space-x-10 w-screen">
             <Image src="/logo.png" width={40} height={40} alt="RA-logo" />
             <div className="flex-1">
-                <p className="text-3xl text-black font-bold">Car Reservation App</p>
+                <p className="text-3xl text-white font-bold">Car Reservation App</p>
             </div>
             <div className="hidden ml-auto md:flex items-center space-x-2 md:space-x-10 ">
-                <p className="text-2xl text-black">{' '}
+                <p className="text-2xl text-white">{' '}
                     {dateState.toLocaleDateString('en-GB', {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric',
                     })}
                 </p>
-                <p className="text-2xl text-black">
+                <p className="text-2xl text-white">
                     {dateState.toLocaleString('en-US', {
                         hour: 'numeric',
                         minute: 'numeric',
