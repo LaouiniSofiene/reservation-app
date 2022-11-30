@@ -1,10 +1,28 @@
+'use client';
+
+import { useEffect, useState } from "react"
 
 
 export const useFetchReservations = (value) => {
 
-    const reservations = window.localStorage.getItem('Reservations')
-    
+    const [selectedDateReservations, setSelectedDateReservations] = useState<Object[]>([])
+    const reservations = JSON.parse(window.localStorage.getItem('Reservations') || '[]')
 
-    return JSON.parse(reservations || '{}')
+    const fetchReservation = () => {
+        reservations.map((reservation) => {
+            if(new Date(reservation.date).toDateString() === value.toDateString()){
+                setSelectedDateReservations(oldArray => [...oldArray, reservation])
+            }
+            else{
+                setSelectedDateReservations([])
+            }
+        })
+    }
+    
+    useEffect(() => {
+        fetchReservation()
+    }, [value])
+    
+    return selectedDateReservations
 
 }

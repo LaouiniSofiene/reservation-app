@@ -3,19 +3,25 @@
 import styled from 'styled-components';
 import '../styles/globals.css'
 import Calendar from 'react-calendar'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Form from '../components/Form';
 import Reservation from '../components/Reservation';
 import { useFetchReservations } from '../hooks/useFetchReservations';
 
+type reser = {
+  name: string,
+  startHour: string,
+  endHour : string
+}
+
 function homePage() {
   const [value, onChange] = useState(new Date());
-
   const tileDisabled = ({ date } : {date : Date}) => {
     return date < new Date((new Date()).valueOf() - 1000*3600*24) || date.getDay() === 0 || date.getDay() === 6
   }
   
-  console.log(useFetchReservations({value}))
+  const reservations : reser[] = useFetchReservations(value)
+  console.log(reservations)
 
   return (
     <div className="flex main-container flex-col gap-10">
@@ -31,14 +37,18 @@ function homePage() {
               <Calendar onChange={onChange} tileDisabled={tileDisabled} value={value} />
             </CalendarContainer>
           </div>
-          <div className="flex-1 mt-5 rounded-md bg-card p-5">
+          <div className={`${!reservations.length && 'hidden'}` + ' flex-1 mt-5 rounded-md bg-card p-5'}>
             <div>
-                <p className="block mb-2 text-3xl font-medium text-gray-900 dark:text-white border-b-4 border-[#56697F] pb-2">Reservation for Date DD/MM/YYYY</p>
+                <p className="block mb-2 text-3xl font-medium text-gray-900 dark:text-white border-b-4 border-[#56697F] pb-2">Reservations for {value.toDateString()}</p>
             </div>
-            <Reservation />
-            <Reservation />
-            <Reservation />
-            <Reservation />
+            <div>
+              {
+                reservations.map((reservation) => (
+                  <Reservation name={reservation.name} startHour={reservation.startHour} endHour={reservation.endHour} />
+                ))
+              }     
+            </div>
+                   
           </div>
           <div className="flex-1 mt-5 rounded-md bg-card p-5">
             <Form date={value} />

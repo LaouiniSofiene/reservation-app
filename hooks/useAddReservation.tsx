@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useState } from "react"
 
 interface Props {
@@ -9,6 +11,9 @@ interface Props {
 
 export const useAddReservation = ({name, startHour, endHour, date} : Props) => {
 
-    window.localStorage.setItem('Reservations', JSON.stringify({name : name, startHour: startHour, endHour : endHour, date : date})) 
+    const reservations = JSON.parse(window.localStorage.getItem('Reservations') || '[]')
+    reservations.push({name : name, startHour: startHour, endHour : endHour, date : date})
+
+    window.localStorage.setItem('Reservations', JSON.stringify(reservations))
 
 }

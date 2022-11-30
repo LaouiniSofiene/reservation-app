@@ -23,7 +23,7 @@ function Form({ date } : {date : Date}) {
 
   const onSubmit: SubmitHandler<Inputs> = ({ name, startHour, endHour }) => {
       useAddReservation({name, startHour, endHour, date})
-      console.log(window.localStorage.getItem('Reservations'))
+      console.log(JSON.parse(window.localStorage.getItem('Reservations') || '{}'))
   }
 
   useEffect(() => {
