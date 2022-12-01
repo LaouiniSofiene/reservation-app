@@ -19,6 +19,7 @@ function homePage() {
     return date < new Date((new Date()).valueOf() - 1000*3600*24) || date.getDay() === 0 || date.getDay() === 6
   }
   
+ 
   let reservations : IReservation[] = useFetchReservations(value)
   
   

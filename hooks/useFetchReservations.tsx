@@ -13,9 +13,7 @@ export const useFetchReservations = (value: Date) => {
     
     const fetchReservation = () => {
         if(reservations && reservations.reservations){
-            for (const reservation of reservations.reservations) {
-                setSelectedDateReservations(oldArray => [...oldArray, reservation])
-            }
+            setSelectedDateReservations(reservations.reservations)
         } else{
             setSelectedDateReservations([])
         }
@@ -25,6 +23,7 @@ export const useFetchReservations = (value: Date) => {
         fetchReservation()
     }, [value,storedData.length])
 
+    console.log(selectedDateReservations)
     
     return selectedDateReservations
 

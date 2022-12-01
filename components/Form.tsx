@@ -2,7 +2,7 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react"
-import { addReservation } from "../hooks/addReservation";
+import { addReservation } from "../helpers/addReservation";
 import { IReservation, TimeSlot } from "../typings";
 
 
