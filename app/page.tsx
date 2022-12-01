@@ -20,7 +20,7 @@ function homePage() {
   }
   
   let reservations : IReservation[] = useFetchReservations(value)
-
+  
   
 
   return (
@@ -34,7 +34,13 @@ function homePage() {
         <div className="flex flex-col md:flex-row w-full gap-10">
           <div className="flex-1 w-full">
             <CalendarContainer>
-              <Calendar onChange={onChange} tileDisabled={tileDisabled} value={value} />
+              <Calendar onChange={onChange} tileDisabled={tileDisabled} tileContent={
+                    ({ activeStartDate, date, view }) => {
+                      return reservations.length && date.toDateString() === value.toDateString()
+                      ? <p className="hidden">{reservations.length}</p> 
+                      : null
+                    }
+                  } value={value} />
             </CalendarContainer>
           </div>
           <div className={`${!reservations.length && 'hidden'}` + ' flex-1 mt-5 rounded-md bg-card p-5'}>
@@ -109,6 +115,10 @@ const CalendarContainer = styled.div`
     &:hover {
       background-color: #000000;
       color : #ffffff;
+
+      p{
+        display : block;
+      }
     }
     &:active {
       background-color: #56697F;

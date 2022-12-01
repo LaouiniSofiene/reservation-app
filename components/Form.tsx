@@ -2,7 +2,7 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react"
-import { useAddReservation } from "../hooks/useAddReservation";
+import { addReservation } from "../hooks/addReservation";
 import { IReservation, TimeSlot } from "../typings";
 
 
@@ -19,7 +19,7 @@ function Form({ date } : {date : Date}) {
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<number[]>([])
   const [selectedStartHour, setSelectedStartHour] = useState(0)
   const [selectedEndHour, setSelectedEndHour] = useState(1)
-  
+  const [collisionError, setCollisionError] = useState(false)
 
   const { 
     register,
@@ -28,7 +28,7 @@ function Form({ date } : {date : Date}) {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = ({ name }) => {
-    useAddReservation({name : name,startHour: timeSlots[selectedStartHour], endHour: timeSlots[selectedEndHour], date})
+    addReservation({name : name,startHour: timeSlots[selectedStartHour], endHour: timeSlots[selectedEndHour], date})
   }
 
   const handleStartHour = (e: any) => {
@@ -64,10 +64,10 @@ function Form({ date } : {date : Date}) {
       }
     }
     setSelectedTimeSlots(selectedSlots)
+    
   }, [date])
 
   
- 
 
 
   return (

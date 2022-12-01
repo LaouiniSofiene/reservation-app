@@ -11,7 +11,7 @@ interface Props {
 }
 
 
-export const useAddReservation = ({name, startHour, endHour, date} : Props) => {
+export const addReservation = ({name, startHour, endHour, date} : Props) => {
 
     const reservations = JSON.parse(window.localStorage.getItem('Reservations') || '[]')
     const currentReservation = reservations.find((reservation: IReservation) => reservation.date === date.toLocaleDateString())
