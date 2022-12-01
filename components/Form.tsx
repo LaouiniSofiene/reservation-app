@@ -16,11 +16,6 @@ interface Inputs{
   endHour : TimeSlot,
 }
 
-type reser = {
-  name: string,
-  startHour: string,
-  endHour : string
-}
 
 interface IReservation  {
   name: string,
@@ -29,7 +24,7 @@ interface IReservation  {
   date : string
 }
 
-function Form({ date, reservations } : {date : Date, reservations : reser}) {
+function Form({ date } : {date : Date}) {
 
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<number[]>([])
@@ -47,11 +42,11 @@ function Form({ date, reservations } : {date : Date, reservations : reser}) {
     useAddReservation({name : name,startHour: timeSlots[selectedStartHour], endHour: timeSlots[selectedEndHour], date})
   }
 
-  function handleStartHour(e) {
+  const handleStartHour = (e: any) => {
     setSelectedStartHour(e.target.value);
   }
 
-  function handleEndHour(e) {
+  const handleEndHour = (e: any) => {
     setSelectedEndHour(e.target.value);
   }
 

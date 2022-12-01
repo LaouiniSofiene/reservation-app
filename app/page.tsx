@@ -21,7 +21,7 @@ interface IReservation  {
 }
 
 function homePage() {
-  
+
   const [value, onChange] = useState(new Date());
   const tileDisabled = ({ date } : {date : Date}) => {
     return date < new Date((new Date()).valueOf() - 1000*3600*24) || date.getDay() === 0 || date.getDay() === 6
@@ -60,7 +60,7 @@ function homePage() {
             </div>   
           </div>
           <div className="flex-1 mt-5 rounded-md bg-card p-5">
-            <Form date={value} reservations={reservations} />
+            <Form date={value} />
           </div>
         </div>
       </div>

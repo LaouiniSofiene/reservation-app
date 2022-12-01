@@ -14,12 +14,21 @@ interface Props {
     date : Date
 }
 
+interface IReservation  {
+    name: string,
+    startHour: TimeSlot,
+    endHour : TimeSlot,
+    date : string
+}
+
 export const useAddReservation = ({name, startHour, endHour, date} : Props) => {
 
     const reservations = JSON.parse(window.localStorage.getItem('Reservations') || '[]')
-    const currentReservation = reservations.find((reservation) => reservation.date === date.toLocaleDateString())
+    const currentReservation = reservations.find((reservation: IReservation) => reservation.date === date.toLocaleDateString())
     if(currentReservation){
-        currentReservation.reservations.push({name : name, startHour: startHour, endHour : endHour, date : date})
+        if(!currentReservation.reservations.find((reservation: IReservation) => reservation.name === name)){
+            currentReservation.reservations.push({name : name, startHour: startHour, endHour : endHour, date : date})
+        }
     } else {
         reservations.push(
             {
@@ -29,7 +38,6 @@ export const useAddReservation = ({name, startHour, endHour, date} : Props) => {
         )
     }
    
-
     window.localStorage.setItem('Reservations', JSON.stringify(reservations))
 
 }
