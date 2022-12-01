@@ -1,18 +1,8 @@
 'use client';
 
 import { useEffect, useState } from "react"
+import { IReservation } from "../typings";
 
-interface TimeSlot {
-    id: number,
-    value : string
-}
-
-interface IReservation  {
-    name: string,
-    startHour: TimeSlot,
-    endHour : TimeSlot,
-    date : string
-}
 
 export const useFetchReservations = (value: Date) => {
 

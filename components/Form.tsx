@@ -3,12 +3,8 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react"
 import { useAddReservation } from "../hooks/useAddReservation";
+import { IReservation, TimeSlot } from "../typings";
 
-
-interface TimeSlot {
-  id: number,
-  value : string
-}
 
 interface Inputs{
   name : string,
@@ -16,13 +12,6 @@ interface Inputs{
   endHour : TimeSlot,
 }
 
-
-interface IReservation  {
-  name: string,
-  startHour: TimeSlot,
-  endHour : TimeSlot,
-  date : string
-}
 
 function Form({ date } : {date : Date}) {
 
@@ -92,15 +81,22 @@ function Form({ date } : {date : Date}) {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
               {...register("name", {required: true})}
             />
+            {errors.name && (
+              <div className="mt-2 p-2 bg-red-400">
+                <p className="p-1 text-[13px] font-light  text-white">
+                  Please enter your name.
+                </p>
+              </div>
+            )}
             <label className="block mt-2 mb-2 text-sm font-medium text-gray-900 dark:text-white">Starting hour</label>
             <select 
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              {...register("startHour", {required: true})}
+              {...register("startHour")}
               onChange={handleStartHour}
               value={selectedStartHour}
             >
               {
-                timeSlots.map((timeSlot) => (
+                timeSlots.filter((timeSlot) => ![9,10,11].includes(timeSlot.id)).map((timeSlot) => (
                   <option disabled={isDisabled(timeSlot,"start")} key={timeSlot.id} value={timeSlot.id}>{timeSlot.value}</option>
                 ))
               }
@@ -108,7 +104,7 @@ function Form({ date } : {date : Date}) {
             <label className="block mt-2 mb-2 text-sm font-medium text-gray-900 dark:text-white">Ending hour</label>
             <select 
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              {...register("endHour", {required: true})}
+              {...register("endHour")}
               onChange={handleEndHour}
               value={selectedEndHour}
             >

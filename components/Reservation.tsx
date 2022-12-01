@@ -1,19 +1,9 @@
 import { useEffect, useState } from "react"
-
-interface TimeSlot {
-  id: number,
-  value : string
-}
-
-interface Data {
-  name : string,
-  startHour: TimeSlot,
-  endHour : TimeSlot,
-  date : string
-}
+import { IReservation } from "../typings"
 
 
-function Reservation({name, startHour, endHour, date} : Data) {
+
+function Reservation({name, startHour, endHour, date} : IReservation) {
 
   const [nextDay, setNextDay] = useState("")
   const nextDayIds = [9,10,11]

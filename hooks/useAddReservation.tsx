@@ -1,11 +1,7 @@
 'use client';
 
-import { useCallback, useState } from "react"
+import { IReservation, TimeSlot } from "../typings";
 
-interface TimeSlot {
-    id: number,
-    value : string
-}
 
 interface Props {
     name : string, 
@@ -14,12 +10,6 @@ interface Props {
     date : Date
 }
 
-interface IReservation  {
-    name: string,
-    startHour: TimeSlot,
-    endHour : TimeSlot,
-    date : string
-}
 
 export const useAddReservation = ({name, startHour, endHour, date} : Props) => {
 
@@ -39,5 +29,5 @@ export const useAddReservation = ({name, startHour, endHour, date} : Props) => {
     }
    
     window.localStorage.setItem('Reservations', JSON.stringify(reservations))
-
+    window.location.reload()
 }

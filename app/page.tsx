@@ -7,18 +7,10 @@ import { useEffect, useState } from 'react';
 import Form from '../components/Form';
 import Reservation from '../components/Reservation';
 import { useFetchReservations } from '../hooks/useFetchReservations';
+import { IReservation } from '../typings';
 
 
-interface TimeSlot {
-  id: number,
-  value : string
-}
-interface IReservation  {
-  name: string,
-  startHour: TimeSlot,
-  endHour : TimeSlot,
-  date : string
-}
+
 
 function homePage() {
 
@@ -47,14 +39,12 @@ function homePage() {
           </div>
           <div className={`${!reservations.length && 'hidden'}` + ' flex-1 mt-5 rounded-md bg-card p-5'}>
             <div>
-                <p className="block mb-5 text-3xl font-medium text-gray-900 dark:text-white border-b-4 border-[#56697F] pb-2">Reservations for {value.toDateString()}</p>
+                <p className="block mb-5 text-3xl font-medium text-gray-900 dark:text-white border-b-4 border-[#56697F] pb-2">Reservations for {value.toLocaleDateString()}</p>
             </div>
             <div>
               {
                 reservations.map((reservation) => (
-                  <div>
-                    <Reservation name={reservation.name} startHour={reservation.startHour} endHour={reservation.endHour} date={reservation.date} />
-                  </div>
+                  <Reservation key={reservation.name} name={reservation.name} startHour={reservation.startHour} endHour={reservation.endHour} date={reservation.date} />
                 ))
               }     
             </div>   
