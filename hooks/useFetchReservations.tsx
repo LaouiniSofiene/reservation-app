@@ -2,26 +2,44 @@
 
 import { useEffect, useState } from "react"
 
+interface TimeSlot {
+    id: number,
+    value : string
+  }
+  interface IReservation  {
+    name: string,
+    startHour: TimeSlot,
+    endHour : TimeSlot,
+    date : string
+  }
 
-export const useFetchReservations = (value) => {
+export const useFetchReservations = (value: Date) => {
 
-    const [selectedDateReservations, setSelectedDateReservations] = useState<Object[]>([])
-    const reservations = JSON.parse(window.localStorage.getItem('Reservations') || '[]')
-
+    const [selectedDateReservations, setSelectedDateReservations] = useState<IReservation[]>([])
+    const storedData = JSON.parse(window.localStorage.getItem('Reservations') || '[]')
+    const reservations = storedData.find((reservation: IReservation) => reservation.date == value.toLocaleDateString())
+    
     const fetchReservation = () => {
-        reservations.map((reservation) => {
-            if(new Date(reservation.date).toDateString() === value.toDateString()){
-                setSelectedDateReservations(oldArray => [...oldArray, reservation])
+        if(reservations && reservations.reservations){
+            for (const reservation of reservations.reservations) {
+                // if(reservation.date === value.toLocaleDateString()){
+                    setSelectedDateReservations(oldArray => [...oldArray, reservation])
+                // }
+                
             }
-            else{
-                setSelectedDateReservations([])
-            }
-        })
+            // reservations.reservations.map((reservation) => {
+                
+            // })
+        } else{
+            setSelectedDateReservations([])
+        }
     }
     
+    console.log(value)
     useEffect(() => {
         fetchReservation()
-    }, [value])
+    }, [value,JSON.parse(window.localStorage.getItem('Reservations') || '[]').length])
+
     
     return selectedDateReservations
 

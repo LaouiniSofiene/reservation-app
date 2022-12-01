@@ -1,19 +1,41 @@
+'use client';
+
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react"
 import { useAddReservation } from "../hooks/useAddReservation";
 
 
+interface TimeSlot {
+  id: number,
+  value : string
+}
 
 interface Inputs{
   name : string,
-  startHour : string,
-  endHour : string,
+  startHour : TimeSlot,
+  endHour : TimeSlot,
 }
 
-function Form({ date } : {date : Date}) {
+type reser = {
+  name: string,
+  startHour: string,
+  endHour : string
+}
 
-  const [startTimeSlots, setStartTimeSlots] = useState<string[]>([])
-  const [endTimeSlots, setEndTimeSlots] = useState<string[]>([])
+interface IReservation  {
+  name: string,
+  startHour: TimeSlot,
+  endHour : TimeSlot,
+  date : string
+}
+
+function Form({ date, reservations } : {date : Date, reservations : reser}) {
+
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
+  const [selectedTimeSlots, setSelectedTimeSlots] = useState<number[]>([])
+  const [selectedStartHour, setSelectedStartHour] = useState(0)
+  const [selectedEndHour, setSelectedEndHour] = useState(1)
+  
 
   const { 
     register,
@@ -21,23 +43,47 @@ function Form({ date } : {date : Date}) {
     formState: { errors } 
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = ({ name, startHour, endHour }) => {
-      useAddReservation({name, startHour, endHour, date})
-      console.log(JSON.parse(window.localStorage.getItem('Reservations') || '{}'))
+  const onSubmit: SubmitHandler<Inputs> = ({ name }) => {
+    useAddReservation({name : name,startHour: timeSlots[selectedStartHour], endHour: timeSlots[selectedEndHour], date})
   }
 
+  function handleStartHour(e) {
+    setSelectedStartHour(e.target.value);
+  }
+
+  function handleEndHour(e) {
+    setSelectedEndHour(e.target.value);
+  }
+
+  const isDisabled = (timeSlot : TimeSlot, hour : string) => {
+    if(hour === "start"){
+      return selectedTimeSlots.find((slot) => slot === timeSlot.id) != undefined ? true : false 
+    } else {
+      return timeSlot.id <= selectedStartHour || selectedTimeSlots.find((slot) => slot === timeSlot.id ) != undefined ? true : false 
+    }
+  }
+
+
+
   useEffect(() => {
     //call for check empty hours hook according to given date
-    setStartTimeSlots(["9:00", "10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"])
+    setTimeSlots([{id: 0, value: "9:00"}, {id: 1, value: "10:00"}, {id: 2, value: "11:00"}, {id: 3, value: "12:00"}, {id: 4, value: "13:00"}, {id: 5, value: "14:00"}, {id: 6, value: "15:00"}, {id: 7, value: "16:00"}, {id: 8, value: "17:00"}, {id: 9, value: "9:00"}, {id: 10, value: "10:00"}, {id: 11, value: "11:00"}])
+    const storedData = JSON.parse(window.localStorage.getItem('Reservations') || '[]')
+    const reservations = storedData.find((reservation: IReservation) => reservation.date == date.toLocaleDateString())
+    const selectedSlots = []
 
+    if(reservations && reservations.reservations){
+      for(let reservation of reservations.reservations){
+        for (let index = reservation.startHour.id; index <= reservation.endHour.id; index++) {
+          selectedSlots.push(index)
+        }
+      }
+    }
+    setSelectedTimeSlots(selectedSlots)
   }, [date])
 
-  useEffect(() => {
-    //call for check empty hours hook according to given date
-    setEndTimeSlots(["10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"])
-    
-  }, [startTimeSlots])
   
+ 
 
 
   return (
@@ -55,10 +101,12 @@ function Form({ date } : {date : Date}) {
             <select 
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               {...register("startHour", {required: true})}
+              onChange={handleStartHour}
+              value={selectedStartHour}
             >
               {
-                startTimeSlots.map((timeSlot) => (
-                  <option key={timeSlot} value={timeSlot}>{timeSlot}</option>
+                timeSlots.map((timeSlot) => (
+                  <option disabled={isDisabled(timeSlot,"start")} key={timeSlot.id} value={timeSlot.id}>{timeSlot.value}</option>
                 ))
               }
             </select>
@@ -66,10 +114,12 @@ function Form({ date } : {date : Date}) {
             <select 
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               {...register("endHour", {required: true})}
+              onChange={handleEndHour}
+              value={selectedEndHour}
             >
                {
-                endTimeSlots.map((timeSlot) => (
-                  <option key={timeSlot} value={timeSlot}>{timeSlot}</option>
+                timeSlots.map((timeSlot) => (
+                  <option disabled={isDisabled(timeSlot,"end")} key={timeSlot.id} value={timeSlot.id}>{timeSlot.value}</option>
                 ))
               }
             </select>

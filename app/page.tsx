@@ -8,20 +8,28 @@ import Form from '../components/Form';
 import Reservation from '../components/Reservation';
 import { useFetchReservations } from '../hooks/useFetchReservations';
 
-type reser = {
+
+interface TimeSlot {
+  id: number,
+  value : string
+}
+interface IReservation  {
   name: string,
-  startHour: string,
-  endHour : string
+  startHour: TimeSlot,
+  endHour : TimeSlot,
+  date : string
 }
 
 function homePage() {
+  
   const [value, onChange] = useState(new Date());
   const tileDisabled = ({ date } : {date : Date}) => {
     return date < new Date((new Date()).valueOf() - 1000*3600*24) || date.getDay() === 0 || date.getDay() === 6
   }
   
-  const reservations : reser[] = useFetchReservations(value)
-  console.log(reservations)
+  let reservations : IReservation[] = useFetchReservations(value)
+
+  
 
   return (
     <div className="flex main-container flex-col gap-10">
@@ -39,19 +47,20 @@ function homePage() {
           </div>
           <div className={`${!reservations.length && 'hidden'}` + ' flex-1 mt-5 rounded-md bg-card p-5'}>
             <div>
-                <p className="block mb-2 text-3xl font-medium text-gray-900 dark:text-white border-b-4 border-[#56697F] pb-2">Reservations for {value.toDateString()}</p>
+                <p className="block mb-5 text-3xl font-medium text-gray-900 dark:text-white border-b-4 border-[#56697F] pb-2">Reservations for {value.toDateString()}</p>
             </div>
             <div>
               {
                 reservations.map((reservation) => (
-                  <Reservation name={reservation.name} startHour={reservation.startHour} endHour={reservation.endHour} />
+                  <div>
+                    <Reservation name={reservation.name} startHour={reservation.startHour} endHour={reservation.endHour} date={reservation.date} />
+                  </div>
                 ))
               }     
-            </div>
-                   
+            </div>   
           </div>
           <div className="flex-1 mt-5 rounded-md bg-card p-5">
-            <Form date={value} />
+            <Form date={value} reservations={reservations} />
           </div>
         </div>
       </div>

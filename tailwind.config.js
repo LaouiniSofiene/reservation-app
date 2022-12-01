@@ -8,7 +8,8 @@ module.exports = {
     extend: {
       colors : {
         'header' : "rgba(248, 238, 232, 0.19)",
-        'card' : "rgba(255, 255, 255, 0.35)"
+        'card' : "rgba(255, 255, 255, 0.35)",
+        'reservation' : "rgba(255, 255, 255, 0.50)"
       }
     },
   },
